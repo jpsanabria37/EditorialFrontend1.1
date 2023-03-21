@@ -80,7 +80,7 @@ export default function ListadoClientes({ clientes }) {
   );
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`
   );

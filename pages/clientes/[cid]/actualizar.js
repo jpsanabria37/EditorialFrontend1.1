@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { getTipoDocumentos } from "@/utils/api/api";
+import { getTipoDocumentos } from "../../api/api";
 import ErrorsList from "components/errorsList";
 import ErrorListProperty from "components/errorListProperty";
 import Dashboard from "layouts/dashboard";
