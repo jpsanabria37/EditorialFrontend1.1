@@ -3,20 +3,18 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import BackButton from "components/backbutton";
 import BotonLink from "components/ButtonLink";
+import { HiPencilAlt } from "react-icons/hi";
+import Link from "next/link";
 
-import ReactModal from "react-modal";
-
-
-
-
+import Modal from "react-modal";
 
 export async function getServerSideProps(context) {
   try {
-    const { id } = context.params;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${id}`);
+    const cid = context.params.cid;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cid}`
+    );
     const data = await res.json();
-    console.log(data);
-    console.log("hijueputa");
     return {
       props: {
         cliente: data.Data || null,
@@ -32,32 +30,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-function Cliente({cliente , error}){
-  if (error) {
-    return <div>{error}</div>;
-  }
-  return (
-    <div>
-      <h1>Cliente {cliente.Id}</h1>
-      <p>Nombre: {cliente.Nombre}</p>
-      <p>Email: {cliente.Email}</p>
-    </div>
-  );
-}
-
-
-export default Cliente;
-
-/* import Dashboard from "../../../layouts/dashboard";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import BackButton from "components/backbutton";
-import BotonLink from "components/ButtonLink";
-
-import ReactModal from "react-modal";
-
-export default function ClienteDetails({ cliente = {} }) {
-
+function ClienteDetails({ cliente = {} }) {
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [marca, setMarca] = useState("");
@@ -122,7 +95,13 @@ export default function ClienteDetails({ cliente = {} }) {
         setNumeroPlaca("");
         setNumeroMotor("");
 
-        return router.push("/clientes");
+        // Cierra el modal
+        setModalIsOpen(false);
+
+        // Recarga la página
+        window.location.reload();
+
+        return router.push(`/clientes/${clienteId}`);
       }
       const data = await res.json();
       setErrors(data.errors);
@@ -154,7 +133,8 @@ export default function ClienteDetails({ cliente = {} }) {
             <div>
               <p className="font-bold mb-1">Documento:</p>
               <p>
-                <b>{cliente?.TipoDocumento?.Tipo}:</b> {cliente?.NumeroDocumento}
+                <b>{cliente?.TipoDocumento?.Tipo}:</b>{" "}
+                {cliente?.NumeroDocumento}
               </p>
             </div>
             <div>
@@ -166,7 +146,7 @@ export default function ClienteDetails({ cliente = {} }) {
             <BotonLink
               href={`${cliente?.Id}/actualizar`}
               className="mr-4"
-              isLoading={isLoading}
+              isLoading={isLoading.toString()}
             >
               Editar
             </BotonLink>
@@ -211,74 +191,57 @@ export default function ClienteDetails({ cliente = {} }) {
           </div>
         </div>
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <ul>
-            {cliente?.Vehiculos?.map((vehiculo) => (
-              <li key={vehiculo.Id} className="border-t border-gray-200">
-                <a
-                  href={`/vehiculos/${vehiculo.Id}`}
-                  className="block hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out"
-                >
-                  <div className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
-                      <div className="text-lg leading-5 font-medium text-indigo-600 truncate">
-                        {`${vehiculo.Marca} ${vehiculo.Modelo}`}
-                      </div>
-                      <div className="ml-2 flex-shrink-0 flex">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          {vehiculo.anio}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mt-2 sm:flex sm:justify-between">
-                      <div className="sm:flex">
-                        <div className="mr-6 flex items-center text-sm leading-5 text-gray-500">
-                          <span>{vehiculo.NumeroPlaca}</span>
-                        </div>
-                        <div className="mr-6 flex items-center text-sm leading-5 text-gray-500">
-                          <svg
-                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M5 5a1 1 0 112 0v5a1 1 0 11-2 0V5zm4-2a1 1 0 100 2h2a1 1 0 100-2H9zm7.707 1.293a1 1 0 010 1.414L14.414 10l2.293 2.293a1 1 0 11-1.414 1.414L13 11.414l-2.293 2.293a1 1 0 11-1.414-1.414L11.586 10l-2.293-2.293a1 1 0 011.414-1.414L13 8.586l2.293-2.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span>color</span>
-                        </div>
-                      </div>
-                      <div className="mt-2 flex items-center text-sm leading-5 sm:mt-0">
-                        <div className="mr-6 flex items-center text-sm leading-5 text-gray-500">
-                          <svg
-                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3.293-4.293a1 1 0 011.414 0L10 12.586l2.879-2.879a1 1 0 011.414 1.414L11.414 14l2.879 2.879a1 1 0 01-1.414 1.414L10 15.414l-2.879 2.879a1 1 0 01-1.414-1.414L8.586 14 5.707 11.121a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span>kilometraje</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            ))}
-          </ul>
+        <div className="flex flex-col">
+          <div className="overflow-x-auto">
+            <table className="table-auto border-collapse w-full">
+              <thead>
+                <tr className="text-left bg-gray-200">
+                  <th className="px-4 py-2">Marca</th>
+                  <th className="px-4 py-2">Modelo</th>
+                  <th className="px-4 py-2">Año</th>
+                  <th className="px-4 py-2">Número de placa</th>
+                  <th className="px-4 py-2">Número de motor</th>
+                  <th className="px-4 py-2"></th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                {cliente?.Vehiculos?.map((vehiculo) => (
+                  <tr key={vehiculo.Id}>
+                    <td className="border px-4 py-2">{vehiculo.Marca}</td>
+                    <td className="border px-4 py-2">{vehiculo.Modelo}</td>
+                    <td className="border px-4 py-2">{vehiculo.Anio}</td>
+                    <td className="border px-4 py-2">{vehiculo.NumeroPlaca}</td>
+                    <td className="border px-4 py-2">{vehiculo.NumeroMotor}</td>
+                    <td className="border px-4 py-2"> <Link href={`/vehiculos/${vehiculo.Id}`}>
+                    <HiPencilAlt />
+                  </Link></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        <ReactModal
+        <Modal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
         >
-          <h2 className="text-2xl font-bold mb-4">Agregar vehículo</h2>
+          <div className="flex justify-around">
+            <div></div>
+            <div>
+              {" "}
+              <h2 className="text-2xl font-bold mb-4">Agregar vehículo</h2>
+            </div>
+            <div>
+              {" "}
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 ml-4 rounded"
+                onClick={() => setModalIsOpen(false)}
+              >
+                X
+              </button>
+            </div>
+          </div>
+
           <form
             className="my-14 mx-auto max-w-3xl space-y-6 px-4"
             onSubmit={handleSubmit}
@@ -387,40 +350,12 @@ export default function ClienteDetails({ cliente = {} }) {
                   "Enviar"
                 )}
               </button>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 ml-4 rounded"
-                onClick={() => setModalIsOpen(false)}
-              >
-                Cerrar
-              </button>
             </div>
           </form>
-        </ReactModal>
+        </Modal>
       </Dashboard>
     </>
   );
 }
 
-
-
-export async function getServerSideProps(context) {
-  try {
-    const { id } = context.params;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${id}`);
-    const data = await res.json();
-    console.log(cliente);
-    return {
-      props: {
-        cliente: data.Data || null,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {
-        cliente: null,
-      },
-    };
-  }
-}
-*/
+export default ClienteDetails;
