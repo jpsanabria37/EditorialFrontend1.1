@@ -5,6 +5,7 @@ import BackButton from "components/backbutton";
 import BotonLink from "components/ButtonLink";
 import { HiPencilAlt } from "react-icons/hi";
 import Link from "next/link";
+import ErrorListProperty from "@/components/errorListPropertygeneral";
 
 import Modal from "react-modal";
 

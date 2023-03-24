@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Dashboard from "../../layouts/dashboard";
 import { HiPencilAlt } from "react-icons/hi";
+import ErrorListProperty from "@/components/errorListPropertygeneral";
 
 export default function ListadoClientes({ clientes }) {
   return (
