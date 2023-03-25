@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { getTipoDocumentos } from "@/utils/api/api";
+import { getTipoDocumentos } from "../../api/api";
 import ErrorsList from "components/errorsList";
 import ErrorListProperty from "components/errorListProperty";
 import Dashboard from "layouts/dashboard";
@@ -9,23 +9,7 @@ import BackButton from "components/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export async function getStaticPaths() {
-  // Aquí puedes obtener la lista de clientes para generar rutas estáticas
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`
-  );
-  const data = await res.json();
-  const clientes = data.Data;
-  // Generamos un array con los IDs de los clientes
-  const ids = clientes.map((cliente) => cliente.Id);
-
-  // Generamos las rutas estáticas para cada ID de cliente
-  const paths = ids.map((id) => ({ params: { cid: id.toString() } }));
-
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const { cid } = params;
   const tipoDocumentos = await getTipoDocumentos();
 

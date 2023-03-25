@@ -99,11 +99,6 @@ const LoginPage = () => {
         </div>
       </div>
       <div className="hidden relative lg:flex w-1/2 items-center justify-center h-full bg-[#3f485b]">
-        <img
-          src="login.sgv"
-          alt="image"
-          className="rounded-full animate-bounce w-60 h-60 bg-gradient-to-tr"
-        ></img>
       </div>
     </div>
   );

@@ -8,10 +8,17 @@ import BackButton from "components/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export const getStaticProps = async () => {
+export async function getServerSideProps() {
   const tipoDocumentos = await getTipoDocumentos();
-  return { props: { tipoDocumentos } };
-};
+
+  // Hacemos una petición para obtener los datos del cliente según su ID
+
+  return {
+    props: {
+      tipoDocumentos,
+    },
+  };
+}
 
 const CrearClienteFormulario = ({ tipoDocumentos }) => {
   const router = useRouter();
@@ -121,7 +128,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
               >
                 {tipoDocumentos.map((option) => (
                   <option key={option.Id} value={option.Id}>
-                    <span className=" text-center">{option.Tipo}</span>
+                    {option.Tipo}
                   </option>
                 ))}
               </select>
