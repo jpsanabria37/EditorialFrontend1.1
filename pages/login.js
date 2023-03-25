@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 const LoginPage = () => {
   const route = useRouter();
@@ -100,11 +99,11 @@ const LoginPage = () => {
         </div>
       </div>
       <div className="hidden relative lg:flex w-1/2 items-center justify-center h-full bg-[#3f485b]">
-        <Image
+        <img
           src="login.sgv"
           alt="image"
           className="rounded-full animate-bounce w-60 h-60 bg-gradient-to-tr"
-        ></Image>
+        ></img>
       </div>
     </div>
   );
