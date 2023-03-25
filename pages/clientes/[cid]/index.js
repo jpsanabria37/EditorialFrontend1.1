@@ -212,9 +212,12 @@ function ClienteDetails({ cliente = {} }) {
                     <td className="border px-4 py-2">{vehiculo.Anio}</td>
                     <td className="border px-4 py-2">{vehiculo.NumeroPlaca}</td>
                     <td className="border px-4 py-2">{vehiculo.NumeroMotor}</td>
-                    <td className="border px-4 py-2"> <Link href={`/vehiculos/${vehiculo.Id}`}>
-                    <HiPencilAlt />
-                  </Link></td>
+                    <td className="border px-4 py-2">
+                      {" "}
+                      <Link href={`/vehiculos/${vehiculo.Id}`}>
+                        <HiPencilAlt />
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -224,6 +227,7 @@ function ClienteDetails({ cliente = {} }) {
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
+          ariaHideApp={false}
         >
           <div className="flex justify-around">
             <div></div>
@@ -357,5 +361,4 @@ function ClienteDetails({ cliente = {} }) {
     </>
   );
 }
-
 export default ClienteDetails;
