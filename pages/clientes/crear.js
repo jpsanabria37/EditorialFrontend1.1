@@ -30,52 +30,49 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
   const [direccion, setDireccion] = useState("");
   const [numeroDocumento, setNumeroDocumento] = useState("");
   const [selectedOption, setSelectedOption] = useState(1);
-
   const [submitting, setSubmitting] = useState(false);
-
   const [errors, setErrors] = useState([]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setSubmitting(true);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
-        {
-          method: "POST",
-          headers: {
-            accept: "application/json",
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: nombre,
-            apellido: apellido,
-            fechaNacimiento: fechaNacimiento,
-            telefono: telefono,
-            email: email,
-            direccion: direccion,
-            numeroDocumento: numeroDocumento,
-            tipoDocumentoId: parseInt(selectedOption),
-          }),
-        }
-      );
 
-      if (res.ok) {
-        setErrors([]);
-        setNombre("");
-        setApellido("");
-        setFechaNacimiento("");
-        setTelefono("");
-        setEmail("");
-        setDireccion("");
-        setNumeroDocumento("");
-
-        return router.push("/clientes");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: nombre,
+          apellido: apellido,
+          fechaNacimiento: fechaNacimiento,
+          telefono: telefono,
+          email: email,
+          direccion: direccion,
+          numeroDocumento: numeroDocumento,
+          tipoDocumentoId: parseInt(selectedOption),
+        }),
       }
-      const data = await res.json();
-      setErrors(data.errors);
-      setSubmitting(false);
-    } catch (errors) {}
+    );
+
+    if (res.ok) {
+      setErrors([]);
+      setNombre("");
+      setApellido("");
+      setFechaNacimiento("");
+      setTelefono("");
+      setEmail("");
+      setDireccion("");
+      setNumeroDocumento("");
+
+      return router.push("/clientes");
+    }
+    const data = await res.json();
+    setErrors(data.errors);
+    setSubmitting(false);
   }
   return (
     <>
@@ -85,9 +82,9 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
           className="my-14 mx-auto max-w-3xl space-y-6 px-4"
           onSubmit={handleSubmit}
         >
-          {Object.keys(errors).length > 0 && (
+          {Object.keys(errors).length > 0 ? (
             <ErrorsList errors={errors}></ErrorsList>
-          )}
+          ) : null}
           <h1 className=" text-3xl font-semibold"> Crear cliente</h1>
 
           <div className="grid grid-cols-2 gap-4">
