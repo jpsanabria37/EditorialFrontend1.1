@@ -96,7 +96,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 disabled={submitting}
                 placeholder="Nombre"
               />
-              {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
+              <ErrorListProperty errors={errors.Nombre} />
             </div>
             <div className="...">
               <input
@@ -108,9 +108,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 disabled={submitting}
                 placeholder="Apellido"
               />
-              {errors.Apellido && (
-                <ErrorListProperty errors={errors.Apellido} />
-              )}
+              <ErrorListProperty errors={errors.Apellido} />
             </div>
           </div>
 
@@ -139,9 +137,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 placeholder="Número documento"
                 required={true}
               />
-              {errors.NumeroDocumento && (
-                <ErrorListProperty errors={errors.NumeroDocumento} />
-              )}
+              <ErrorListProperty errors={errors.NumeroDocumento} />
             </div>
           </div>
 
@@ -174,9 +170,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 placeholder="Teléfono"
               />
 
-              {errors.Telefono && (
-                <ErrorListProperty errors={errors.Telefono} />
-              )}
+              <ErrorListProperty errors={errors.Telefono} />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -191,7 +185,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 placeholder="Correo electrónico"
               />
 
-              {errors.Email && <ErrorListProperty errors={errors.Email} />}
+              <ErrorListProperty errors={errors.Email} />
             </div>
             <div>
               <input
@@ -204,9 +198,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 placeholder="Dirección"
               />
 
-              {errors.Direccion && (
-                <ErrorListProperty errors={errors.Direccion} />
-              )}
+              <ErrorListProperty errors={errors.Direccion} />
             </div>
           </div>
 
