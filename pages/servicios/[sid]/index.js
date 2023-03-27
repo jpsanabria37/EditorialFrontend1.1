@@ -2,6 +2,7 @@ import Dashboard from "../../../layouts/dashboard";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import BackButton from "components/backbutton";
+import BotonLink from "components/ButtonLink";
 
 export async function getServerSideProps({ params }) {
   const { sid } = params;
@@ -55,12 +56,13 @@ function ServicioDetail({ servicio = {} }) {
           <p className="text-lg mt-2">{servicio.Descripcion}</p>
 
           <div className="mt-6">
-            <button
-              disabled={isLoading}
-              className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded"
+            <BotonLink
+              href={`${servicio?.Id}/actualizar`}
+              className="mr-4"
+              isLoading={isLoading.toString()}
             >
               Editar
-            </button>
+            </BotonLink>
 
             <button
               className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 ml-4 rounded"
