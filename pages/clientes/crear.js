@@ -96,7 +96,7 @@ export default function VistaCliente({ tipoDocumentos }) {
                 disabled={submitting}
                 placeholder="Nombre"
               />
-              <ErrorListProperty errors={errors.Nombre} />
+              {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
             </div>
             <div className="...">
               <input
