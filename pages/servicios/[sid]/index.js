@@ -1,24 +1,10 @@
 import Dashboard from "../../../layouts/dashboard";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import BackButton from "components/backbutton";
+import BotonLink from "components/ButtonLink";
 
-export async function getStaticPaths() {
-  // Aquí puedes obtener la lista de clientes para generar rutas estáticas
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`
-  );
-  const data = await res.json();
-  const servicios = data.Data;
-  // Generamos un array con los IDs de los clientes
-  const ids = servicios.map((servicio) => servicio.Id);
-
-  // Generamos las rutas estáticas para cada ID de cliente
-  const paths = ids.map((id) => ({ params: { sid: id.toString() } }));
-
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const { sid } = params;
 
   // Hacemos una petición para obtener los datos del cliente según su ID
@@ -64,17 +50,19 @@ function ServicioDetail({ servicio = {} }) {
   return (
     <>
       <Dashboard>
+        <BackButton></BackButton>
         <div className="h-screen flex flex-col justify-start items-center bg-gray-100">
           <h1 className="text-3xl font-bold mt-10">{servicio.Nombre}</h1>
           <p className="text-lg mt-2">{servicio.Descripcion}</p>
 
           <div className="mt-6">
-            <button
-              disabled={isLoading}
-              className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded"
+            <BotonLink
+              href={`${servicio?.Id}/actualizar`}
+              className="mr-4"
+              isLoading={isLoading.toString()}
             >
               Editar
-            </button>
+            </BotonLink>
 
             <button
               className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 ml-4 rounded"

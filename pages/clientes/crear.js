@@ -10,9 +10,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export async function getServerSideProps() {
   const tipoDocumentos = await getTipoDocumentos();
-
-  // Hacemos una petición para obtener los datos del cliente según su ID
-
   return {
     props: {
       tipoDocumentos,
@@ -20,8 +17,11 @@ export async function getServerSideProps() {
   };
 }
 
-const CrearClienteFormulario = ({ tipoDocumentos }) => {
+export default function VistaCliente({ tipoDocumentos }) {
+  const [errors, setErrors] = useState({});
   const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  //valores de entrada
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
@@ -31,52 +31,49 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
   const [numeroDocumento, setNumeroDocumento] = useState("");
   const [selectedOption, setSelectedOption] = useState(1);
 
-  const [submitting, setSubmitting] = useState(false);
-
-  const [errors, setErrors] = useState([]);
-
   async function handleSubmit(e) {
     e.preventDefault();
     setSubmitting(true);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
-        {
-          method: "POST",
-          headers: {
-            accept: "application/json",
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: nombre,
-            apellido: apellido,
-            fechaNacimiento: fechaNacimiento,
-            telefono: telefono,
-            email: email,
-            direccion: direccion,
-            numeroDocumento: numeroDocumento,
-            tipoDocumentoId: parseInt(selectedOption),
-          }),
-        }
-      );
-
-      if (res.ok) {
-        setErrors([]);
-        setNombre("");
-        setApellido("");
-        setFechaNacimiento("");
-        setTelefono("");
-        setEmail("");
-        setDireccion("");
-        setNumeroDocumento("");
-
-        return router.push("/clientes");
+    // Llame a la API y maneje la respuesta aquí...
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: nombre,
+          apellido: apellido,
+          fechaNacimiento: fechaNacimiento,
+          telefono: telefono,
+          email: email,
+          direccion: direccion,
+          numeroDocumento: numeroDocumento,
+          tipoDocumentoId: parseInt(selectedOption),
+        }),
       }
-      const data = await res.json();
-      setErrors(data.errors);
-      setSubmitting(false);
-    } catch (errors) {}
+    );
+    if (res.ok) {
+      setErrors({});
+      // Restablecer los valores de entrada aquí...
+      setNombre("");
+      setApellido("");
+      setFechaNacimiento("");
+      setTelefono("");
+      setEmail("");
+      setDireccion("");
+      setNumeroDocumento("");
+      return router.push("/clientes");
+    }
+    const data = await res.json();
+    setErrors(data.errors, () => {
+      // Hacer algo después de que se actualice el estado de errores, si es necesario
+    });
+    setSubmitting(false);
   }
+
   return (
     <>
       <Dashboard>
@@ -85,9 +82,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
           className="my-14 mx-auto max-w-3xl space-y-6 px-4"
           onSubmit={handleSubmit}
         >
-          {Object.keys(errors).length > 0 && (
-            <ErrorsList errors={errors}></ErrorsList>
-          )}
+          <ErrorsList errors={errors}></ErrorsList>
           <h1 className=" text-3xl font-semibold"> Crear cliente</h1>
 
           <div className="grid grid-cols-2 gap-4">
@@ -101,7 +96,9 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 disabled={submitting}
                 placeholder="Nombre"
               />
-              {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
+              {Object.keys(errors).length > 0 && (
+                <ErrorListProperty errors={errors.Nombre} />
+              )}
             </div>
             <div className="...">
               <input
@@ -113,9 +110,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 disabled={submitting}
                 placeholder="Apellido"
               />
-              {errors.Apellido && (
-                <ErrorListProperty errors={errors.Apellido} />
-              )}
+              <ErrorListProperty errors={errors.Apellido} />
             </div>
           </div>
 
@@ -144,9 +139,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 placeholder="Número documento"
                 required={true}
               />
-              {errors.NumeroDocumento && (
-                <ErrorListProperty errors={errors.NumeroDocumento} />
-              )}
+              <ErrorListProperty errors={errors.NumeroDocumento} />
             </div>
           </div>
 
@@ -179,9 +172,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 placeholder="Teléfono"
               />
 
-              {errors.Telefono && (
-                <ErrorListProperty errors={errors.Telefono} />
-              )}
+              <ErrorListProperty errors={errors.Telefono} />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -196,7 +187,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 placeholder="Correo electrónico"
               />
 
-              {errors.Email && <ErrorListProperty errors={errors.Email} />}
+              <ErrorListProperty errors={errors.Email} />
             </div>
             <div>
               <input
@@ -209,9 +200,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 placeholder="Dirección"
               />
 
-              {errors.Direccion && (
-                <ErrorListProperty errors={errors.Direccion} />
-              )}
+              <ErrorListProperty errors={errors.Direccion} />
             </div>
           </div>
 
@@ -246,9 +235,8 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
             )}
           </button>
         </form>
+        ;
       </Dashboard>
     </>
   );
-};
-
-export default CrearClienteFormulario;
+}
