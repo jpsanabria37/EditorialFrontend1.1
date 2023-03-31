@@ -60,7 +60,6 @@ function ClienteDetails({ cliente = {} }) {
         router.push("/clientes");
       }
       setIsLoading(false);
-      console.error("Error deleting cliente:", res.status);
     }
   }
 

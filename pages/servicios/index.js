@@ -24,10 +24,10 @@ function ServiciosList({ servicios = {} }) {
           <thead className="border-b-2 border-gray-200 bg-gray-50">
             <tr>
               <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                Nombre
+                Tipo
               </th>
-              <th className="p-3 text-left text-sm font-semibold tracking-wide">
-                Descripcion
+              <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
+                Nombre
               </th>
               <th className="p-3 text-left text-sm font-semibold tracking-wide">
                 Precio
@@ -41,10 +41,10 @@ function ServiciosList({ servicios = {} }) {
             {servicios?.map((servicio) => (
               <tr key={servicio.Id}>
                 <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                  {servicio.Nombre}
+                  {servicio.CategoriaVehiculo.Nombre}
                 </td>
                 <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                  {servicio.Descripcion}
+                  {servicio.Nombre}
                 </td>
                 <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
                   {servicio.Precio}
@@ -67,10 +67,10 @@ function ServiciosList({ servicios = {} }) {
           >
             <div className="flex items-center space-x-2 text-sm">
               <div className="whitespace-nowrap text-sm text-gray-600">
-                {servicio.Nombre}
+                {servicio.CategoriaVehiculo.Nombre}
               </div>
               <div className="whitespace-nowrap text-sm text-gray-600">
-                {servicio.Descripcion}
+                {servicio.Nombre}
               </div>
             </div>
             <div className="whitespace-nowrap text-sm text-black">

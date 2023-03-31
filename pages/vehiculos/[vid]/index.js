@@ -3,25 +3,35 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import BackButton from "components/backbutton";
 import BotonLink from "components/ButtonLink";
+import ErrorPage from "next/error";
 
 export async function getServerSideProps({ params }) {
   const { vid } = params;
-
-  // Hacemos una petición para obtener los datos del cliente según su ID
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Vehiculo/${vid}`
-  );
-  const data = await res.json();
-  const vehiculo = data.Data;
-
-  return {
-    props: {
-      vehiculo,
-    },
-  };
+  try {
+    // Hacemos una petición para obtener los datos del cliente según su ID
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Vehiculo/${vid}`
+    );
+    const data = await res.json();
+    const vehiculo = data.Data;
+    return {
+      props: {
+        vehiculo,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        error: { statusCode: 404, message: `Vehicle with id ${id} not found` },
+      },
+    };
+  }
 }
 
-function VehiculoDetail({ vehiculo = {} }) {
+function VehiculoDetail({ vehiculo = {}, error }) {
+  if (error) {
+    return <ErrorPage statusCode={error.statusCode} title={error.message} />;
+  }
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
